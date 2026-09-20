@@ -1,0 +1,72 @@
+name: Video Downloader Tool
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - request.json
+      - downloader.py
+      - .github/workflows/video-downloader.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install downloader dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade requests curl_cffi
+          python -m pip install --upgrade https://github.com/yt-dlp/yt-dlp/archive/master.zip
+          yt-dlp --version
+          ffmpeg -version | head -n 1
+
+      - name: Execute request
+        id: download
+        continue-on-error: true
+        run: |
+          python downloader.py request.json
+
+      - name: Print result
+        if: always()
+        run: |
+          if [ -f output/result.json ]; then
+            cat output/result.json
+          else
+            echo '{"status":"failed","errors":["result.json was not produced"]}' | tee output/result.json
+          fi
+
+      - name: Upload result artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-downloader-${{ github.run_id }}
+          path: output/
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+      - name: Mark workflow failed when downloader failed
+        if: always()
+        run: |
+          if [ "${{ steps.download.outcome }}" != "success" ]; then
+            exit 1
+          fi
