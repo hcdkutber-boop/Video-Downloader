@@ -14,12 +14,13 @@ def run(cmd, **kw):
 def load_request():
     return json.loads((ROOT / "review_request.json").read_text(encoding="utf-8"))
 
-def download_video(url):
+def download_video(url, max_height=480):
     TMP.mkdir(exist_ok=True)
     template = str(TMP / "source.%(ext)s")
+    h = int(max_height or 480)
     run([
         "yt-dlp","--no-playlist","--merge-output-format","mp4",
-        "--remux-video","mp4","-f","bv*[height<=1080]+ba/b[height<=1080]/b",
+        "--remux-video","mp4","-f",f"bv*[height<={h}]+ba/b[height<={h}]/b",
         "-o",template,url
     ])
     vids = sorted(TMP.glob("source.*"))
@@ -107,7 +108,7 @@ def main():
         shutil.rmtree(TMP)
     OUT.mkdir(parents=True)
     TMP.mkdir(parents=True)
-    video=download_video(req["url"])
+    video=download_video(req["url"], req.get("max_height", 480))
     frames=extract_frames(video,interval)
     make_sheets(frames,interval)
     audio=extract_audio(video)
