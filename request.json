@@ -1,6 +1,6 @@
 {
-  "request_id": "autostat-2026-08",
+  "request_id": "autostat-2026-08-probe-subs",
   "url": "https://rutube.ru/video/88e47180e7ed4890366c750ae57340e7/",
-  "mode": "download",
+  "mode": "probe",
   "max_height": 1080
 }
