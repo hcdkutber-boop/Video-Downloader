@@ -95,9 +95,8 @@ def visual(req, idx):
     vid=download_section(req["url"],start,end,req.get("max_height",480),tmp,False)
     interval=float(req.get("visual_frame_interval_sec",1))
     raw=tmp/"raw"; raw.mkdir()
-    vf=f"{crop_filter(req['crop'])},fps=1/{interval}"
-    run(["ffmpeg","-y","-loglevel","error","-i",str(vid),"-vf",vf,
-         "-q:v","2",str(raw/"frame_%05d.jpg")])
+    run(["ffmpeg","-y","-loglevel","error","-i",str(vid),
+         "-vf",f"fps=1/{interval}","-q:v","2",str(raw/"frame_%05d.jpg")])
     files=sorted(raw.glob("*.jpg"))
     cand=out/"candidates"; cand.mkdir()
     threshold=float(req.get("visual_change_threshold",1.2))
@@ -108,7 +107,10 @@ def visual(req, idx):
         abs_t=start+i*interval
         if abs_t < core_start-0.05 or abs_t > core_end+0.05:
             continue
-        im=Image.open(p).convert("L").resize((96,54))
+        full=Image.open(p).convert("RGB")
+        cr=req["crop"]
+        crop=full.crop((int(cr["x"]),int(cr["y"]),int(cr["x"]+cr["w"]),int(cr["y"]+cr["h"])))
+        im=crop.convert("L").resize((96,54))
         score=999.0 if last_small is None else ImageStat.Stat(ImageChops.difference(im,last_small)).mean[0]
         due=(abs_t-last_saved_t)>=heartbeat
         changed=(score>=threshold and (abs_t-last_saved_t)>=min_gap)
