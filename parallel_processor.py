@@ -99,6 +99,7 @@ def visual(req, idx):
          "-vf",f"fps=1/{interval}","-q:v","2",str(raw/"frame_%05d.jpg")])
     files=sorted(raw.glob("*.jpg"))
     cand=out/"candidates"; cand.mkdir()
+    crops=out/"crops"; crops.mkdir()
     threshold=float(req.get("visual_change_threshold",1.2))
     heartbeat=float(req.get("visual_heartbeat_sec",20))
     min_gap=float(req.get("candidate_min_gap_sec",1))
@@ -116,8 +117,10 @@ def visual(req, idx):
         changed=(score>=threshold and (abs_t-last_saved_t)>=min_gap)
         if last_small is None or changed or due:
             dst=cand/f"{len(rows)+1:04d}_{int(abs_t):04d}s.jpg"
+            cropdst=crops/f"{len(rows)+1:04d}_{int(abs_t):04d}s.jpg"
             shutil.copy2(p,dst)
-            rows.append({"file":dst.name,"time_sec":round(abs_t,3),"diff_score":round(score,3)})
+            crop.save(cropdst,quality=94,optimize=True)
+            rows.append({"file":dst.name,"crop_file":cropdst.name,"time_sec":round(abs_t,3),"diff_score":round(score,3)})
             last_saved_t=abs_t
         last_small=im
     (out/"manifest.json").write_text(json.dumps({
