@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import argparse, json, math, shutil, subprocess
 from pathlib import Path
-from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageStat
 
 ROOT = Path(__file__).resolve().parent
 
@@ -40,12 +39,14 @@ def download_section(url, start, end, max_height, outdir, audio_only=False):
     return files[0]
 
 def font(size=18):
+    from PIL import ImageFont
     for p in ["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
               "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf"]:
         if Path(p).exists(): return ImageFont.truetype(p,size)
     return ImageFont.load_default()
 
 def make_contact_sheet(frames, abs_times, out):
+    from PIL import Image, ImageDraw
     cols=4; cell_w=427; cell_h=240; label_h=28
     rows=math.ceil(len(frames)/cols)
     canvas=Image.new("RGB",(cols*cell_w,rows*(cell_h+label_h)),"white")
@@ -85,6 +86,7 @@ def crop_filter(c):
     return f"crop={int(c['w'])}:{int(c['h'])}:{int(c['x'])}:{int(c['y'])}"
 
 def visual(req, idx):
+    from PIL import Image, ImageChops, ImageStat
     parts=int(req.get("main_parts",15)); duration=float(req["duration_sec"])
     overlap=float(req.get("main_overlap_sec",4))
     start,end,core_start,core_end=bounds(duration,parts,idx,overlap)
