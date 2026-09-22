@@ -1,0 +1,28 @@
+name: Parallel video probe
+on:
+  push:
+    branches: [ main ]
+    paths: [ probe_request.json ]
+  workflow_dispatch:
+jobs:
+  probe:
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [0,1,2,3,4]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install pillow
+          python -m pip install --upgrade https://github.com/yt-dlp/yt-dlp/archive/master.zip
+      - run: python parallel_processor.py probe probe_request.json ${{ matrix.part }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: probe-part-${{ matrix.part }}
+          path: probe-output/part_${{ format('{0:00}', matrix.part) }}
+          retention-days: 7
