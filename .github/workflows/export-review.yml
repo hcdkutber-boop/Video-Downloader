@@ -1,0 +1,20 @@
+name: Export review output
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - export_review_request.txt
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload review output
+        uses: actions/upload-artifact@v4
+        with:
+          name: autostat-review-output
+          path: review-output
+          retention-days: 7
