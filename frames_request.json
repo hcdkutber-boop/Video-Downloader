@@ -1,0 +1,117 @@
+{
+  "request_id": "autostat-slide-frames-480p-v1",
+  "url": "https://rutube.ru/video/88e47180e7ed4890366c750ae57340e7/",
+  "max_height": 480,
+  "frames": [
+    {
+      "index": 1,
+      "time_sec": 460,
+      "label": "00:07:40"
+    },
+    {
+      "index": 2,
+      "time_sec": 490,
+      "label": "00:08:10"
+    },
+    {
+      "index": 3,
+      "time_sec": 570,
+      "label": "00:09:30"
+    },
+    {
+      "index": 4,
+      "time_sec": 620,
+      "label": "00:10:20"
+    },
+    {
+      "index": 5,
+      "time_sec": 685,
+      "label": "00:11:25"
+    },
+    {
+      "index": 6,
+      "time_sec": 770,
+      "label": "00:12:50"
+    },
+    {
+      "index": 7,
+      "time_sec": 1435,
+      "label": "00:23:55"
+    },
+    {
+      "index": 8,
+      "time_sec": 1555,
+      "label": "00:25:55"
+    },
+    {
+      "index": 9,
+      "time_sec": 1725,
+      "label": "00:28:45"
+    },
+    {
+      "index": 10,
+      "time_sec": 1955,
+      "label": "00:32:35"
+    },
+    {
+      "index": 11,
+      "time_sec": 2000,
+      "label": "00:33:20"
+    },
+    {
+      "index": 12,
+      "time_sec": 2145,
+      "label": "00:35:45"
+    },
+    {
+      "index": 13,
+      "time_sec": 2350,
+      "label": "00:39:10"
+    },
+    {
+      "index": 14,
+      "time_sec": 2480,
+      "label": "00:41:20"
+    },
+    {
+      "index": 15,
+      "time_sec": 2490,
+      "label": "00:41:30"
+    },
+    {
+      "index": 16,
+      "time_sec": 2560,
+      "label": "00:42:40"
+    },
+    {
+      "index": 17,
+      "time_sec": 2575,
+      "label": "00:42:55"
+    },
+    {
+      "index": 18,
+      "time_sec": 2885,
+      "label": "00:48:05"
+    },
+    {
+      "index": 19,
+      "time_sec": 3135,
+      "label": "00:52:15"
+    },
+    {
+      "index": 20,
+      "time_sec": 3265,
+      "label": "00:54:25"
+    },
+    {
+      "index": 21,
+      "time_sec": 3290,
+      "label": "00:54:50"
+    },
+    {
+      "index": 22,
+      "time_sec": 3370,
+      "label": "00:56:10"
+    }
+  ]
+}
