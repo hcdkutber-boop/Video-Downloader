@@ -25,7 +25,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: visual-part-${{ matrix.part }}
-          path: visual-output/part_${{ format('{0:00}', matrix.part) }}
+          path: visual-output
           retention-days: 7
 
   audio:
@@ -48,7 +48,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: audio-part-${{ matrix.part }}
-          path: audio-output/part_${{ format('{0:00}', matrix.part) }}
+          path: audio-output
           retention-days: 7
 
   aggregate:
