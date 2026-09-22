@@ -1,0 +1,20 @@
+{
+  "request_id": "autostat-august-2026-audio-only-v2",
+  "url": "https://rutube.ru/video/88e47180e7ed4890366c750ae57340e7/",
+  "duration_sec": 3608,
+  "max_height": 720,
+  "main_parts": 15,
+  "main_overlap_sec": 5,
+  "visual_frame_interval_sec": 1,
+  "visual_change_threshold": 2,
+  "visual_heartbeat_sec": 15,
+  "candidate_min_gap_sec": 1,
+  "crop": {
+    "x": 16,
+    "y": 128,
+    "w": 832,
+    "h": 466
+  },
+  "whisper_model": "small",
+  "language": "ru"
+}
