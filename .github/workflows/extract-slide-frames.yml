@@ -1,0 +1,31 @@
+name: Extract AUTOSTAT slide frames
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - frames_request.json
+  workflow_dispatch:
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade https://github.com/yt-dlp/yt-dlp/archive/master.zip
+      - name: Extract exact frames
+        run: python extract_frames.py
+      - name: Upload frames
+        uses: actions/upload-artifact@v4
+        with:
+          name: autostat-slide-frames-480p
+          path: frames-output
+          retention-days: 7
