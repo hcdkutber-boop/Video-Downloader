@@ -6,6 +6,7 @@ root=Path(".")
 out=Path("aggregate-output")
 shutil.rmtree(out,ignore_errors=True)
 (out/"candidates").mkdir(parents=True,exist_ok=True)
+(out/"crops").mkdir(parents=True,exist_ok=True)
 
 trans=[]
 for p in root.glob("audio-parts/**/transcript.json"):
@@ -24,7 +25,14 @@ for p in root.glob("visual-parts/**/manifest.json"):
         dst=out/"candidates"/name
         if src.exists():
             shutil.copy2(src,dst)
-        y=dict(x); y["part"]=part; y["aggregate_file"]=name
+        cropname=x.get("crop_file")
+        agg_crop=None
+        if cropname:
+            cropsrc=p.parent/"crops"/cropname
+            agg_crop=f"p{part:02d}_{cropname}"
+            if cropsrc.exists():
+                shutil.copy2(cropsrc,out/"crops"/agg_crop)
+        y=dict(x); y["part"]=part; y["aggregate_file"]=name; y["aggregate_crop_file"]=agg_crop
         vis.append(y)
 vis.sort(key=lambda x:x["time_sec"])
 
