@@ -97,6 +97,9 @@ def visual(req, idx):
     parts=int(req.get("main_parts",15)); duration=float(req["duration_sec"])
     overlap=float(req.get("main_overlap_sec",4))
     start,end,core_start,core_end=bounds(duration,parts,idx,overlap)
+    # Optional source-video offset; all manifests/transcript times remain absolute.
+    offset=float(req.get("main_start_sec",0))
+    start+=offset; end+=offset; core_start+=offset; core_end+=offset
     out=ROOT/"visual-output"/f"part_{idx:02d}"
     tmp=ROOT/".parallel-tmp"/f"visual_{idx:02d}"
     shutil.rmtree(out,ignore_errors=True); shutil.rmtree(tmp,ignore_errors=True)
@@ -142,6 +145,9 @@ def audio(req, idx):
     parts=int(req.get("main_parts",15)); duration=float(req["duration_sec"])
     overlap=float(req.get("main_overlap_sec",4))
     start,end,core_start,core_end=bounds(duration,parts,idx,overlap)
+    # Optional source-video offset; all manifests/transcript times remain absolute.
+    offset=float(req.get("main_start_sec",0))
+    start+=offset; end+=offset; core_start+=offset; core_end+=offset
     out=ROOT/"audio-output"/f"part_{idx:02d}"
     tmp=ROOT/".parallel-tmp"/f"audio_{idx:02d}"
     shutil.rmtree(out,ignore_errors=True); shutil.rmtree(tmp,ignore_errors=True)
