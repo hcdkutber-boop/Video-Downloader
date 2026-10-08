@@ -35,8 +35,6 @@ def write_result(data):
 
 
 def safe_public_url(url):
-    # Allow yt-dlp's native YouTube search pseudo-URL for this repo's controlled workflow.
-    # Example: ytsearch1:АВТОСТАТ Оперативка итоги сентября 2026
     if isinstance(url, str) and re.fullmatch(r"ytsearch\d*:.+", url, re.I):
         return url
     p = urlparse(url)
@@ -93,11 +91,20 @@ def quality_selector(max_height):
     return f"bv*[height<={h}]+ba/b[height<={h}]/b"
 
 
+def ytdlp_common_args():
+    # Android/iOS client fallback is important for public YouTube videos that trigger
+    # a browser anti-bot page in GitHub runners. Keep this generic for yt-dlp.
+    return [
+        "--user-agent", UA,
+        "--extractor-args", "youtube:player_client=android,ios,web_embedded;player_skip=webpage",
+    ]
+
+
 def run_ytdlp(url, max_height, mode):
     log("ENGINE yt-dlp: starting")
     if mode == "probe":
         proc = subprocess.run(
-            ["yt-dlp", "--no-playlist", "--dump-single-json", url],
+            ["yt-dlp", *ytdlp_common_args(), "--no-playlist", "--dump-single-json", url],
             text=True,
             capture_output=True,
         )
@@ -120,12 +127,19 @@ def run_ytdlp(url, max_height, mode):
             "webpage_url": info.get("webpage_url"),
         }
 
-    template = str(OUT / "%(title).150B [%(id)s].%(ext)s")
+    template = str(OUT / "%(id)s.%(ext)s")
     cmd = [
         "yt-dlp",
+        *ytdlp_common_args(),
         "--no-playlist",
         "--newline",
         "--write-info-json",
+        "--write-auto-subs",
+        "--write-subs",
+        "--sub-langs",
+        "ru.*,ru,en.*",
+        "--sub-format",
+        "vtt/best",
         "--merge-output-format",
         "mp4",
         "--remux-video",
