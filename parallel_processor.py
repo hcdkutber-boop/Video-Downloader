@@ -156,8 +156,17 @@ def audio(req, idx):
     wav=tmp/"audio.wav"
     run(["ffmpeg","-y","-loglevel","error","-i",str(src),"-vn","-ac","1","-ar","16000",
          "-c:a","pcm_s16le",str(wav)])
+    # Read the ffmpeg-produced PCM WAV as float32 directly. This bypasses
+    # PyAV's av.open(metadata_errors=...), which is incompatible with PyAV 19.
+    import wave
+    import numpy as np
+    with wave.open(str(wav), "rb") as source_wav:
+        if (source_wav.getnchannels(), source_wav.getframerate(), source_wav.getsampwidth()) != (1, 16000, 2):
+            raise ValueError("Expected mono PCM16 WAV at 16 kHz")
+        samples = source_wav.readframes(source_wav.getnframes())
+    pcm=np.frombuffer(samples,dtype="<i2").astype(np.float32)/32768.0
     model=WhisperModel(req.get("whisper_model","small"),device="cpu",compute_type="int8")
-    segs,info=model.transcribe(str(wav),language=req.get("language","ru"),vad_filter=True,beam_size=5)
+    segs,info=model.transcribe(pcm,language=req.get("language","ru"),vad_filter=True,beam_size=5)
     rows=[]
     for s in segs:
         a=start+s.start; b=start+s.end
