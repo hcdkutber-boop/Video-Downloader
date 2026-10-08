@@ -1,45 +1,38 @@
-# Progress update — 2026-10-08 18:16 UTC
+# AUTOSTAT Operativka — September 2026 (9 months) — DELIVERED
 
-**SOURCE ACCESS SOLVED**. The earlier "BLOCKED" statement below is historical, not current.
+**Final status (2026-10-08): CHECKED + SENT via Gmail. No repeat search, download, processing, or sending is required for this month.**
 
-- Verified matching VK archive: https://vk.com/video-25815680_456239132 (2582 seconds / 43:02; ~first 14+ minutes CarX pre-roll, title at ~19 min).
-- Native VK metadata probe passed: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37821539580
-- First five-way probe passed: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37821669043 (all 5 video artifacts).
-- Second five-way probe 13:00–23:00 passed: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37822148095 (all 5 video artifacts). Stage introduction at 14:30–19:00, Operativka slides after ~19 min.
-- Full 15x visual + 15x audio processing triggered by parallel_request.json on VK source, absolute start 1135 sec, duration 1447 sec: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37822887840
-- Processing now active, not yet complete. Do not rerun or duplicate while live; check run 37822887840 for jobs and artifacts. Do not send files until PPTX and DOCX are created and verified.
+## Authoritative methodology v1.0
+- Google Drive: https://docs.google.com/document/d/1gZI5bP2zfV05M0cXm5W4VIVAtGdRtvs_tHrmBNHSF8o/edit
+- GitHub: https://github.com/hcdkutber-boop/Video-Downloader/blob/main/VIDEO_TO_PRESENTATION_ALGORITHM.md
+- Repository: https://github.com/hcdkutber-boop/Video-Downloader
 
----
+## Video source
+- September 2026 AUTOSTAT Operativka at CarX'26 held on 2026-10-06.
+- Accessible complete VK archive: https://vk.com/video-25815680_456239132, metadata 2582s / 43:02 including stage pre-roll and discussion.
+- YouTube: https://www.youtube.com/watch?v=ZtAOFHAqOmk, blocked for download from GitHub Actions by YouTube bot challenge. Prefer verified VK source on future processing.
+- Correct VK host for yt-dlp: `vk.com/video-25815680_456239132`. `vkvideo.ru/live-...` redirects to `badbrowser.php` and is unsuitable.
 
-# AUTOSTAT Operativka — September 2026 / October discovery checkpoint
+## Verified GitHub Actions checkpoints
+1. VK direct-link metadata: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37821539580 — success.
+2. 5-way initial 00:00–10:00 video probe: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37821669043 — all five success; pre-roll splash screen.
+3. 5-way content probe 13:00–23:00: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37822148095 — all five success; AUTOSTAT presentation starts around 19 min.
+4. Main visual+audio job: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37822887840 — 15 visual parts success; audio jobs initially failed due to PyAV 19 / faster-whisper compatibility.
+5. Audio-only recovery: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37823372651 — all 15 audio transcriptions and aggregate success. Code fixed to read ffmpeg-produced 16kHz PCM WAV to float32 NumPy array before Whisper inference.
+6. 542 image candidates collected, deduplicated/filtered to 15 distinct original screenshot slides; no contact-sheet thumbnails used in PPTX. Some native composite video frames cropped to show only the original slide (no redraw).
+7. DOCX assembled from verified frames and transcript with slide-by-slide absolute display time intervals. 17 rendered pages. PPTX 15 slides. Both ZIP/OOXML containers tested and rendered successfully for visual QA.
 
-Report month: 2026-09 (9 months 2026)
-Discovered/published: 2026-10-06
-Video: https://www.youtube.com/watch?v=ZtAOFHAqOmk
-Title: АВТОСТАТ Оперативка. Оперативная информация по авторынку России. Итоги сентября 2026 г.
-Approximate runtime: 28:55
-Status as of 2026-10-08: **FOUND / PROCESSING BLOCKED AT SOURCE DOWNLOAD / NOT DELIVERED**
+## Final deliverables
+- `AUTOSTAT_Operativka_September_2026_original_slides.pptx` — 15 slides, 2,660,011 bytes.
+- `AUTOSTAT_Operativka_September_2026_notes_by_slides.docx` — 17 pages, 2,663,445 bytes.
+- Created and inspected on 2026-10-08. Both were attached to Gmail message.
+- Gmail **Sent** message ID `1a11cc987c4e54c3`, subject `АВТОСТАТ Оперативка — сентябрь 2026`, to `vchernyadyev@alfabank.ru` and `hcdkutber@yandex.ru`. Search after sending confirmed both attachments and both recipients, with SENT label.
 
-## AUTHORITATIVE ACCEPTED METHODOLOGY
-- Google Drive v1.0 (2026-09-22): https://docs.google.com/document/d/1gZI5bP2zfV05M0cXm5W4VIVAtGdRtvs_tHrmBNHSF8o/edit
-- Repository v1.0: https://github.com/hcdkutber-boop/Video-Downloader/blob/main/VIDEO_TO_PRESENTATION_ALGORITHM.md
-- Use .github/workflows/parallel-probe.yml, parallel-main.yml, parallel-audio.yml and the corresponding *_request.json files; **not** legacy request.json.
-
-## VERIFIED STEPS / OBSERVATIONS
-1. Direct public YouTube video identified, not a mere event announcement. In October 2026 do **not** search for the release again.
-2. Current probe_request.json already contains direct YouTube link ZtAOFHAqOmk and max_height=720.
-3. Latest specialized probe run: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37783265281; all five probe jobs failed on 2026-10-08. Runner setup and yt-dlp installed successfully. Every YouTube extraction yielded: `Sign in to confirm you’re not a bot`. All artifact uploads for probe segments were skipped; no usable video artifacts.
-4. Earlier specialized probe runs 37782239583 and 37782791639 also failed with same YouTube bot confirmation.
-5. Legacy downloader jobs were separately attempted (37784652490, 37784960428, 37785452322, 37785994781, 37786653386), all failed. Most recent attempted `rutubesearch:АВТОСТАТ Оперативка Итоги сентября 2026`; RUTUBE API search returned no matched video, and legacy yt-dlp does not accept rutubesearch: scheme. There is a tiny failure-metadata artifact only, no media.
-6. No September visual or audio extraction/transcription from the found full recording has succeeded. No verified September PPTX/DOCX. No sent-mail delivery confirmed.
-7. Previously accepted **August 2026** result and artifacts do not belong to September and cannot be reused as September originals.
-
-## NEXT ACTION / RETRY CONDITION
-1. Obtain source media via an authorized method that works without YouTube anti-bot challenge (e.g. public original mirror at RuTube/VK when actually identified; user-provided source file; authenticated legitimate video source). DO NOT repeatedly rerun identical GitHub-hosted YouTube probes; they consistently fail at YouTube access.
-2. If another source is identified, first verify it truly contains September 2026 full AUTOSTAT Operativka; then update probe_request.json to its direct URL and run 5 x 2-min probe; inspect five outputs and visually set small detection crop.
-3. Update parallel_request.json and audio_request.json from August to September source/duration/crop **only after successful probe**; run 15-way visual and audio as per accepted v1.0 and keep independent per-segment artifacts.
-4. Deduplicate normal-layout original slides; map transcribed audio to slides with absolute timestamps; build PPTX and DOCX; inspect both; then check Gmail Sent to avoid duplicate and send both files to vchernyadyev@alfabank.ru and hcdkutber@yandex.ru.
-5. Track progression strictly: observed → extracted → transcribed → linked → rendered → checked → delivered. At this checkpoint **only observed** is confirmed.
-6. Blocking error may be reported in chat, but must **not disable or reschedule** monthly monitoring.
-
-Checkpoint created 2026-10-08 following inspection of real GitHub Actions logs.
+## Lessons for future months
+- First read the methodology v1.0; inspect prior run IDs/artifacts and month checkpoint, avoid unnecessary repeated discovery.
+- Source discovery and delivery status are separate phases.
+- Use direct VK video URL when YouTube GitHub-hosted yt-dlp is blocked; validate correct month/title.
+- Do not confuse legacy `request.json` with dedicated `probe_request.json`, `parallel_request.json`, `audio_request.json`.
+- Use real source frames (full-screen where available, otherwise crop just the slide from video composite); retain all absolute timecodes.
+- On audio-only failure, rerun only `parallel-audio.yml`, not successful visual jobs.
+- Verify Gmail Sent and attachments before claiming success; do not disable monitoring after temporary errors.
