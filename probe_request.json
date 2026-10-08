@@ -1,9 +1,10 @@
 {
-  "request_id": "autostat-september-2026-vk-probe-v4",
+  "request_id": "autostat-september-2026-vk-probe-content-v5",
   "url": "https://vk.com/video-25815680_456239132",
   "max_height": 720,
   "probe_duration_sec": 600,
   "probe_parts": 5,
   "probe_overlap_sec": 3,
-  "probe_frame_interval_sec": 10
+  "probe_frame_interval_sec": 10,
+  "probe_start_sec": 780
 }
