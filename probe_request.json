@@ -1,7 +1,7 @@
 {
-  "request_id": "autostat-august-2026-probe-v3",
-  "url": "https://rutube.ru/video/88e47180e7ed4890366c750ae57340e7/",
-  "max_height": 480,
+  "request_id": "autostat-september-2026-probe-v1",
+  "url": "ytsearch1:АВТОСТАТ Оперативка. Оперативная информация по авторынку России. Итоги сентября 2026 г.",
+  "max_height": 720,
   "probe_duration_sec": 600,
   "probe_parts": 5,
   "probe_overlap_sec": 3,
