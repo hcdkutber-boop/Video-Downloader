@@ -9,7 +9,7 @@ def run(cmd):
     subprocess.run(cmd, check=True)
 
 def tc(sec):
-    sec=max(0,float(sec)); h=int(sec//3600); m=int((sec%3600)//60); s=sec%60
+    sec=max(0,float(sec)); h=int(sec//3600); m=int((sec%60*60)//60) if False else int((sec%3600)//60); s=sec%60
     return f"{h:02d}:{m:02d}:{s:06.3f}"
 
 def bounds(duration, parts, idx, overlap):
@@ -18,7 +18,9 @@ def bounds(duration, parts, idx, overlap):
     core_end=duration if idx==parts-1 else (idx+1)*base
     return max(0,core_start-overlap), min(duration,core_end+overlap), core_start, core_end
 
-def download_section(url, start, end, max_height, outdir, audio_only=False):
+def download_section(req, start, end, outdir, audio_only=False):
+    url=req["url"]
+    max_height=req.get("max_height", 480)
     outdir.mkdir(parents=True, exist_ok=True)
     templ=str(outdir/"source.%(ext)s")
     section=f"*{tc(start)}-{tc(end)}"
@@ -27,10 +29,11 @@ def download_section(url, start, end, max_height, outdir, audio_only=False):
     else:
         h=int(max_height)
         fmt=f"bv*[height<={h}]+ba/b[height<={h}]/b"
+    extra=list(req.get("yt_dlp_extra_args", []))
     cmd=[
         "yt-dlp","--no-playlist","--download-sections",section,
-        "--force-keyframes-at-cuts","-f",fmt,"-o",templ,url
-    ]
+        "--force-keyframes-at-cuts","-f",fmt,"-o",templ
+    ] + extra + [url]
     if not audio_only:
         cmd += ["--merge-output-format","mp4","--remux-video","mp4"]
     run(cmd)
@@ -68,7 +71,7 @@ def probe(req, idx):
     tmp=ROOT/".parallel-tmp"/f"probe_{idx:02d}"
     shutil.rmtree(out,ignore_errors=True); shutil.rmtree(tmp,ignore_errors=True)
     out.mkdir(parents=True); tmp.mkdir(parents=True)
-    vid=download_section(req["url"],start,end,req.get("max_height",480),tmp,False)
+    vid=download_section(req,start,end,tmp,False)
     interval=float(req.get("probe_frame_interval_sec",10))
     framesdir=out/"frames"; framesdir.mkdir()
     run(["ffmpeg","-y","-loglevel","error","-i",str(vid),
@@ -94,7 +97,7 @@ def visual(req, idx):
     tmp=ROOT/".parallel-tmp"/f"visual_{idx:02d}"
     shutil.rmtree(out,ignore_errors=True); shutil.rmtree(tmp,ignore_errors=True)
     out.mkdir(parents=True); tmp.mkdir(parents=True)
-    vid=download_section(req["url"],start,end,req.get("max_height",480),tmp,False)
+    vid=download_section(req,start,end,tmp,False)
     interval=float(req.get("visual_frame_interval_sec",1))
     raw=tmp/"raw"; raw.mkdir()
     run(["ffmpeg","-y","-loglevel","error","-i",str(vid),
@@ -139,7 +142,7 @@ def audio(req, idx):
     tmp=ROOT/".parallel-tmp"/f"audio_{idx:02d}"
     shutil.rmtree(out,ignore_errors=True); shutil.rmtree(tmp,ignore_errors=True)
     out.mkdir(parents=True); tmp.mkdir(parents=True)
-    src=download_section(req["url"],start,end,req.get("max_height",480),tmp,True)
+    src=download_section(req,start,end,tmp,True)
     wav=tmp/"audio.wav"
     run(["ffmpeg","-y","-loglevel","error","-i",str(src),"-vn","-ac","1","-ar","16000",
          "-c:a","pcm_s16le",str(wav)])
