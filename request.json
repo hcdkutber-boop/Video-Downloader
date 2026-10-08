@@ -1,6 +1,6 @@
 {
-  "request_id": "autostat-2026-10-september-youtube-direct-480p-invidious",
-  "url": "https://www.youtube.com/watch?v=ZtAOFHAqOmk",
+  "request_id": "autostat-2026-10-september-rutube-search-480p",
+  "url": "rutubesearch:АВТОСТАТ Оперативка Итоги сентября 2026",
   "mode": "download",
   "max_height": 480
 }
