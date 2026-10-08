@@ -67,6 +67,10 @@ def probe(req, idx):
     duration=float(req.get("probe_duration_sec",600))
     overlap=float(req.get("probe_overlap_sec",2))
     start,end,core_start,core_end=bounds(duration,parts,idx,overlap)
+    # For recordings with a long pre-roll bumper, probe the actual presentation
+    # while retaining absolute timestamps in the output manifest.
+    offset=float(req.get("probe_start_sec",0))
+    start+=offset; end+=offset; core_start+=offset; core_end+=offset
     out=ROOT/"probe-output"/f"part_{idx:02d}"
     tmp=ROOT/".parallel-tmp"/f"probe_{idx:02d}"
     shutil.rmtree(out,ignore_errors=True); shutil.rmtree(tmp,ignore_errors=True)
