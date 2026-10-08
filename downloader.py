@@ -35,9 +35,13 @@ def write_result(data):
 
 
 def safe_public_url(url):
+    # Allow yt-dlp's native YouTube search pseudo-URL for this repo's controlled workflow.
+    # Example: ytsearch1:АВТОСТАТ Оперативка итоги сентября 2026
+    if isinstance(url, str) and re.fullmatch(r"ytsearch\d*:.+", url, re.I):
+        return url
     p = urlparse(url)
     if p.scheme not in ("http", "https") or not p.hostname:
-        raise ValueError("Only absolute http/https URLs are accepted")
+        raise ValueError("Only absolute http/https URLs or ytsearchN: queries are accepted")
     host = p.hostname.lower()
     if host in ("localhost",) or host.endswith(".local"):
         raise ValueError("Local hosts are not accepted")
@@ -113,6 +117,7 @@ def run_ytdlp(url, max_height, mode):
             "title": info.get("title"),
             "duration": info.get("duration"),
             "extractor": info.get("extractor"),
+            "webpage_url": info.get("webpage_url"),
         }
 
     template = str(OUT / "%(title).150B [%(id)s].%(ext)s")
@@ -259,7 +264,6 @@ def run_rutube_fallback(url, max_height, mode):
     if not hls_candidates:
         raise RuntimeError("RUTUBE fallback found streams, but no HLS m3u8 stream")
 
-    # Prefer the explicitly named HLS/best-looking balancer, otherwise first m3u8.
     hls_candidates.sort(
         key=lambda item: (
             "hls" in item[0].lower(),
@@ -348,7 +352,7 @@ def main():
         errors.append(msg)
         log(msg)
 
-    if rutube_id(url):
+    if isinstance(url, str) and rutube_id(url):
         try:
             result = run_rutube_fallback(url, max_height, mode)
             result["previous_errors"] = errors
