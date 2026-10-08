@@ -45,7 +45,7 @@ def write_result(data):
 
 
 def safe_public_url(url):
-    if isinstance(url, str) and re.fullmatch(r"ytsearch\d*:.+", url, re.I):
+    if isinstance(url, str) and (re.fullmatch(r"ytsearch\d*:.+", url, re.I) or url.lower().startswith("rutubesearch:")):
         return url
     p = urlparse(url)
     if p.scheme not in ("http", "https") or not p.hostname:
@@ -354,6 +354,65 @@ def run_youtube_invidious_fallback(url, max_height, mode):
     return media_result(output, "youtube-invidious", {**metadata, "selected_height": height, "mode": "adaptive"})
 
 
+def run_rutube_search(search_url, max_height, mode):
+    query = search_url.split(":", 1)[1]
+    endpoints = [
+        "https://rutube.ru/api/search/video/",
+        "https://rutube.ru/api/search/",
+    ]
+    results = []
+    last_error = None
+    for endpoint in endpoints:
+        try:
+            log(f"ENGINE rutube-search: {endpoint} q={query}")
+            r = requests.get(endpoint, params={"query": query}, headers={"User-Agent": UA, "Referer": "https://rutube.ru/"}, timeout=30)
+            log(f"rutube-search HTTP {r.status_code} {r.url}")
+            if r.status_code != 200:
+                last_error = f"HTTP {r.status_code}: {r.text[:300]}"
+                continue
+            data = r.json()
+            (OUT / "rutube_search.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+            raw_results = data.get("results") or data.get("items") or []
+            for item in raw_results:
+                title = item.get("title") or item.get("name") or ""
+                video_url = item.get("video_url") or item.get("url") or item.get("html_url") or item.get("link")
+                video_id = item.get("id") or item.get("video_id")
+                if not video_url and isinstance(video_id, str) and re.fullmatch(r"[0-9a-f]{32}", video_id):
+                    video_url = f"https://rutube.ru/video/{video_id}/"
+                results.append({"title": title, "url": video_url, "id": video_id, "raw": item})
+            if results:
+                break
+        except Exception as e:
+            last_error = f"{type(e).__name__}: {e}"
+            log(f"rutube-search error: {last_error}")
+    if not results:
+        raise RuntimeError(f"rutube search found no results; last={last_error}")
+
+    chosen = None
+    for item in results:
+        title_l = (item.get("title") or "").lower()
+        if "автостат оперативка" in title_l and "сентябр" in title_l and "2026" in title_l:
+            chosen = item
+            break
+    if not chosen:
+        for item in results:
+            title_l = (item.get("title") or "").lower()
+            if "автостат оперативка" in title_l:
+                chosen = item
+                break
+    if not chosen:
+        chosen = results[0]
+
+    (OUT / "rutube_search_selected.json").write_text(json.dumps(chosen, ensure_ascii=False, indent=2), encoding="utf-8")
+    selected_url = chosen.get("url")
+    if not selected_url:
+        raise RuntimeError(f"rutube search selected result has no URL: {chosen.get('title')}")
+    if mode == "probe":
+        return {"status": "success", "engine": "rutube-search", "mode": "probe", "title": chosen.get("title"), "webpage_url": selected_url, "results_count": len(results)}
+    log(f"rutube-search selected: {chosen.get('title')} -> {selected_url}")
+    return run_rutube_fallback(selected_url, max_height, mode)
+
+
 def choose_hls_variant(master_url, max_height):
     r = requests.get(
         master_url,
@@ -507,6 +566,17 @@ def main():
         msg = f"yt-dlp failed: {type(e).__name__}: {e}"
         errors.append(msg)
         log(msg)
+
+    if isinstance(url, str) and url.lower().startswith("rutubesearch:"):
+        try:
+            result = run_rutube_search(url, max_height, mode)
+            result["previous_errors"] = errors
+            write_result({**base, **result})
+            return 0
+        except Exception as e:
+            msg = f"rutube-search failed: {type(e).__name__}: {e}"
+            errors.append(msg)
+            log(msg)
 
     if isinstance(url, str) and youtube_id(url):
         try:
