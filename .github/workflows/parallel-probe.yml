@@ -4,8 +4,23 @@ on:
     branches: [ main ]
     paths: [ probe_request.json ]
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
+  marker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "${{ github.run_id }}" > AUTOSTAT_LATEST_PROBE_RUN_ID.txt
+          echo "${{ github.sha }}" > AUTOSTAT_LATEST_PROBE_COMMIT.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AUTOSTAT_LATEST_PROBE_RUN_ID.txt AUTOSTAT_LATEST_PROBE_COMMIT.txt
+          git commit -m "Record latest AUTOSTAT probe run ${{ github.run_id }}" || echo "No changes"
+          git push
   probe:
+    needs: marker
     strategy:
       fail-fast: false
       matrix:
