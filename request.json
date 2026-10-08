@@ -1,6 +1,6 @@
 {
-  "request_id": "autostat-2026-10-september-rutube-search-480p",
-  "url": "rutubesearch:АВТОСТАТ Оперативка Итоги сентября 2026",
-  "mode": "download",
-  "max_height": 480
+  "request_id": "autostat-2026-09-vk-archive-candidate-132-metadata",
+  "url": "https://vkvideo.ru/live-25815680_456239132",
+  "mode": "probe",
+  "max_height": 720
 }
