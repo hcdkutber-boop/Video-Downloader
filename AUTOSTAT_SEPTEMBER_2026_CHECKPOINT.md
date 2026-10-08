@@ -1,3 +1,16 @@
+# Progress update — 2026-10-08 18:16 UTC
+
+**SOURCE ACCESS SOLVED**. The earlier "BLOCKED" statement below is historical, not current.
+
+- Verified matching VK archive: https://vk.com/video-25815680_456239132 (2582 seconds / 43:02; ~first 14+ minutes CarX pre-roll, title at ~19 min).
+- Native VK metadata probe passed: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37821539580
+- First five-way probe passed: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37821669043 (all 5 video artifacts).
+- Second five-way probe 13:00–23:00 passed: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37822148095 (all 5 video artifacts). Stage introduction at 14:30–19:00, Operativka slides after ~19 min.
+- Full 15x visual + 15x audio processing triggered by parallel_request.json on VK source, absolute start 1135 sec, duration 1447 sec: https://github.com/hcdkutber-boop/Video-Downloader/actions/runs/37822887840
+- Processing now active, not yet complete. Do not rerun or duplicate while live; check run 37822887840 for jobs and artifacts. Do not send files until PPTX and DOCX are created and verified.
+
+---
+
 # AUTOSTAT Operativka — September 2026 / October discovery checkpoint
 
 Report month: 2026-09 (9 months 2026)
