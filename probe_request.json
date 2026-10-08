@@ -1,9 +1,13 @@
 {
-  "request_id": "autostat-september-2026-probe-v2",
-  "url": "ytsearch1:АВТОСТАТ Оперативка. Оперативная информация по авторынку России. Итоги сентября 2026 г.",
+  "request_id": "autostat-september-2026-probe-v3",
+  "url": "https://www.youtube.com/watch?v=ZtAOFHAqOmk",
   "max_height": 720,
   "probe_duration_sec": 600,
   "probe_parts": 5,
   "probe_overlap_sec": 3,
-  "probe_frame_interval_sec": 10
+  "probe_frame_interval_sec": 10,
+  "yt_dlp_extra_args": [
+    "--extractor-args", "youtube:player_client=android,ios,web",
+    "--js-runtimes", "node"
+  ]
 }
