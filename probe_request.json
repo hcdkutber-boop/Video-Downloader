@@ -1,13 +1,9 @@
 {
-  "request_id": "autostat-september-2026-probe-v3",
-  "url": "https://www.youtube.com/watch?v=ZtAOFHAqOmk",
+  "request_id": "autostat-september-2026-vk-probe-v4",
+  "url": "https://vk.com/video-25815680_456239132",
   "max_height": 720,
   "probe_duration_sec": 600,
   "probe_parts": 5,
   "probe_overlap_sec": 3,
-  "probe_frame_interval_sec": 10,
-  "yt_dlp_extra_args": [
-    "--extractor-args", "youtube:player_client=android,ios,web",
-    "--js-runtimes", "node"
-  ]
+  "probe_frame_interval_sec": 10
 }
