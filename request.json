@@ -1,6 +1,6 @@
 {
-  "request_id": "autostat-2026-10-september-youtube-search-probe",
-  "url": "ytsearch1:АВТОСТАТ Оперативка. Оперативная информация по авторынку России. Итоги сентября 2026 г.",
-  "mode": "probe",
+  "request_id": "autostat-2026-10-september-youtube-direct-480p",
+  "url": "https://www.youtube.com/watch?v=ZtAOFHAqOmk",
+  "mode": "download",
   "max_height": 480
 }
