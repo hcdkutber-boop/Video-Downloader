@@ -1,7 +1,7 @@
 {
-  "request_id": "autostat-august-2026-parallel-main-v1",
-  "url": "https://rutube.ru/video/88e47180e7ed4890366c750ae57340e7/",
-  "duration_sec": 3608,
+  "request_id": "autostat-september-2026-vk-parallel-main-v1",
+  "url": "https://vk.com/video-25815680_456239132",
+  "duration_sec": 1447,
   "max_height": 720,
   "main_parts": 15,
   "main_overlap_sec": 5,
@@ -10,11 +10,12 @@
   "visual_heartbeat_sec": 15,
   "candidate_min_gap_sec": 1,
   "crop": {
-    "x": 16,
-    "y": 128,
-    "w": 832,
-    "h": 466
+    "x": 780,
+    "y": 220,
+    "w": 180,
+    "h": 110
   },
   "whisper_model": "small",
-  "language": "ru"
+  "language": "ru",
+  "main_start_sec": 1135
 }
